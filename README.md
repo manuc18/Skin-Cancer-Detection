@@ -1,4 +1,4 @@
-# Project 28: Binary Skin Cancer Detection
+# Project: Skin Cancer Detection
 ### ISIC 2024 — 3D-TBP Crops & Metadata Fusion
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
@@ -108,7 +108,7 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
 # 4. Download ISIC 2024 data
-https://www.kaggle.com/competitions/isic-2024-challenge
+[ISIC 2024 Challenge — SLICE-3D](https://www.kaggle.com/competitions/isic-2024-challenge)
 
 # 5. Run EDA
 jupyter notebook notebooks/01_eda.ipynb
@@ -132,7 +132,7 @@ python -m src.training.train_baseline --config configs/baseline_ml.yaml
 ## Team
 
 - **Course:** Deep Learning & Advanced Machine Learning — Phase I
-- **Dataset:** ISIC 2024 Skin Cancer Detection Challenge
+- **Members:** Manu Vahan (230125), Priyanshu Jangra (230157)
 
 ---
 
