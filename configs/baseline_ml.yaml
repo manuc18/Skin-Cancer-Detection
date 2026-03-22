@@ -1,0 +1,68 @@
+# configs/baseline_ml.yaml
+# LightGBM Baseline — Metadata-Only Model
+# Design decisions documented in notebooks/02_baseline_ml.ipynb
+
+data:
+  train_csv: data/raw/train-metadata.csv
+  image_dir: data/raw/train-image  # Not used for baseline
+  target_col: target
+  group_col: patient_id           # GroupKFold split — prevents leakage
+
+validation:
+  strategy: group_kfold
+  n_folds: 5
+  groups: patient_id              # All lesions from same patient in same fold
+
+feature_engineering:
+  log_transform_cols: []          # Fill from EDA notebook (skewed features)
+  drop_cols:
+    - isic_id
+    - lesion_id
+    - image_type
+    - attribution
+    - copyright_license
+
+model:
+  name: lightgbm
+  params:
+    objective: binary
+    metric: auc
+    boosting_type: gbdt
+    n_estimators: 2000
+    learning_rate: 0.05
+    num_leaves: 127
+    min_child_samples: 20
+    subsample: 0.8
+    colsample_bytree: 0.8
+    reg_alpha: 0.1
+    reg_lambda: 1.0
+    is_unbalance: true            # Address ~3.5% positive rate (EDA finding 1)
+    random_state: 42
+    n_jobs: -1
+    verbose: -1
+
+training:
+  early_stopping_rounds: 100
+  seed: 42
+
+evaluation:
+  primary_metric: pauc            # pAUC @ TPR >= min_tpr
+  min_tpr: 0.80                   # Clinical constraint: catch >80% of malignancies
+  target_sensitivity: 0.85       # For threshold selection
+
+hyperparameter_tuning:
+  enabled: true
+  n_trials: 50
+  framework: optuna
+  search_space:
+    learning_rate: [0.01, 0.2, log]
+    num_leaves: [31, 511]
+    min_child_samples: [5, 100]
+    subsample: [0.5, 1.0]
+    colsample_bytree: [0.5, 1.0]
+    reg_alpha: [1e-4, 10.0, log]
+    reg_lambda: [1e-4, 10.0, log]
+
+output:
+  model_dir: experiments/baseline_ml
+  figures_dir: report/figures

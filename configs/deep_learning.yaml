@@ -1,0 +1,59 @@
+# configs/deep_learning.yaml
+# EfficientNet-B4 Image-Only Classifier
+
+data:
+  train_csv: data/raw/train-metadata.csv
+  image_dir: data/raw/train-image
+  target_col: target
+  group_col: patient_id
+  image_size: 224
+
+validation:
+  strategy: group_kfold
+  n_folds: 5
+  groups: patient_id
+
+model:
+  backbone: efficientnet_b4       # timm model name
+  pretrained: true                # ImageNet weights (transfer learning)
+  dropout: 0.3
+  use_metadata: false             # Image-only for DL baseline
+
+training:
+  epochs: 20
+  batch_size: 32
+  num_workers: 4
+  seed: 42
+  precision: 16                   # Mixed precision (AMP) for speedup
+
+optimizer:
+  name: adamw
+  lr: 1.0e-4
+  weight_decay: 1.0e-5
+
+scheduler:
+  name: cosine_warmup
+  warmup_epochs: 2
+
+loss:
+  name: focal
+  alpha: 0.25                     # Lin et al. (2017) recommendation
+  gamma: 2.0
+
+evaluation:
+  primary_metric: pauc
+  min_tpr: 0.80
+  target_sensitivity: 0.85
+
+tta:
+  enabled: true                   # Test-time augmentation at inference
+  n_augments: 5
+
+output:
+  checkpoint_dir: experiments/deep_learning/checkpoints
+  figures_dir: report/figures
+
+logging:
+  logger: wandb                   # Experiment tracking
+  project: skin-cancer-detection
+  tags: [efficientnet, image-only, focal-loss]
