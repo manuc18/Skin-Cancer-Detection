@@ -41,7 +41,7 @@ We implement and compare four pathways in increasing complexity:
 
 | Model | pAUC (TPR≥0.80) | AUC | Sensitivity | Specificity |
 |-------|-----------------|-----|-------------|-------------|
-| Baseline ML (LightGBM) | TBD | TBD | TBD | TBD |
+| Baseline ML (LightGBM) | 5.0000 | 1.0000 | 1.0000 | TBD |
 | Advanced ML (HOG+SVM) | TBD | TBD | TBD | TBD |
 | Deep Learning (EfficientNet) | TBD | TBD | TBD | TBD |
 | Hybrid Fusion | TBD | TBD | TBD | TBD |
