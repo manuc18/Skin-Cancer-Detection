@@ -24,75 +24,6 @@ Population-scale skin cancer screening requires AI systems that are **accurate, 
 
 ---
 
-## Approach
-
-We implement and compare four pathways in increasing complexity:
-
-| Pathway | Description | Key Method |
-|---------|-------------|------------|
-| **Baseline ML** | Metadata-only risk prediction | LightGBM + feature engineering |
-| **Advanced ML** | Classical CV features + metadata | HOG/LBP/Color → SVM/RF |
-| **Deep Learning** | Image-only CNN classifier | EfficientNet-B4 + Focal Loss |
-| **Hybrid Fusion** | Visual + clinical information | Image encoder + Metadata MLP + Calibration |
-
----
-
-## Results
-
-| Model | pAUC (TPR≥0.80) | AUC | Sensitivity | Specificity |
-|-------|-----------------|-----|-------------|-------------|
-| Baseline ML (LightGBM) | 5.0000 | 1.0000 | 1.0000 | 0.0000 |
-| Advanced ML (HOG+SVM) | TBD | TBD | TBD | TBD |
-| Deep Learning (EfficientNet) | TBD | TBD | TBD | TBD |
-| Hybrid Fusion | TBD | TBD | TBD | TBD |
-
----
-
-## Repository Structure
-
-```
-skin-cancer-detection/
-├── README.md
-├── requirements.txt
-├── configs/
-│   ├── baseline_ml.yaml        # LightGBM hyperparameters
-│   ├── deep_learning.yaml      # EfficientNet training config
-│   └── fusion.yaml             # Hybrid model config
-├── data/
-│   ├── raw/                    # ISIC 2024 downloads (gitignored)
-│   └── processed/              # Cleaned, split datasets
-├── notebooks/
-│   ├── 01_eda.ipynb            # Exploratory data analysis
-│   ├── 02_baseline_ml.ipynb    # LightGBM baseline
-│   ├── 03_advanced_ml.ipynb    # Classical CV features
-│   ├── 04_deep_learning.ipynb  # EfficientNet training
-│   └── 05_fusion.ipynb         # Hybrid model + calibration
-├── src/
-│   ├── data/
-│   │   ├── dataset.py          # PyTorch datasets
-│   │   ├── transforms.py       # Albumentations pipelines
-│   │   └── preprocessing.py   # Feature engineering
-│   ├── models/
-│   │   ├── baseline.py         # LightGBM wrapper
-│   │   ├── cnn.py              # EfficientNet/ViT encoder
-│   │   ├── metadata_mlp.py     # Metadata branch
-│   │   └── fusion.py           # Hybrid fusion model
-│   ├── training/
-│   │   ├── trainer.py          # PyTorch Lightning module
-│   │   ├── losses.py           # Focal loss, weighted BCE
-│   │   └── callbacks.py        # Early stopping, logging
-│   └── evaluation/
-│       ├── metrics.py          # pAUC, AUC, calibration
-│       ├── calibration.py      # Temperature scaling
-│       └── visualization.py   # ROC curves, reliability diagrams
-├── experiments/                # W&B run logs (gitignored)
-└── report/
-    ├── main.tex                # LaTeX report
-    └── figures/                # Generated plots
-```
-
----
-
 ## Setup & Reproduction
 
 ```bash
@@ -130,16 +61,5 @@ python -m src.training.train_baseline --config configs/baseline_ml.yaml
 ---
 
 ## Team
+- **Members:** Manu Vahan , Priyanshu Jangra 
 
-- **Course:** Deep Learning & Advanced Machine Learning — Phase I
-- **Members:** Manu Vahan (230125), Priyanshu Jangra (230157)
-
----
-
-## References
-
-1. Esteva et al. (2017). *Dermatologist-level classification of skin cancer with deep neural networks.* Nature.
-2. Kurtansky et al. (2024). *The SLICE-3D dataset.* ISIC 2024.
-3. Lin et al. (2017). *Focal Loss for Dense Object Detection.* ICCV.
-4. Guo et al. (2017). *On Calibration of Modern Neural Networks.* ICML.
-5. Codella et al. (2018). *Skin Lesion Analysis Toward Melanoma Detection.* ISIC 2018.
